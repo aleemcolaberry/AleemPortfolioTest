@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   ArrowUpRight, 
@@ -19,8 +19,19 @@ import {
   Twitter,
   Dribbble,
   ArrowRight,
-  Box
+  Box,
+  X
 } from "lucide-react";
+
+interface Project {
+  title: string;
+  category: string;
+  desc: string;
+  img: string;
+  featured?: boolean;
+  link?: string;
+  caseStudyLink?: string;
+}
 
 const Navbar = () => (
   <nav className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant">
@@ -160,39 +171,68 @@ const Experience = () => (
 
 const Projects = () => {
   const [filter, setFilter] = useState("All");
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const triggerRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const projects = [
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedProject(null);
+    };
+
+    if (selectedProject) {
+      window.addEventListener("keydown", handleEscape);
+      // Focus the close button when the modal opens
+      setTimeout(() => closeButtonRef.current?.focus(), 100);
+    } else {
+      // Return focus to the trigger element when the modal closes
+      triggerRef.current?.focus();
+    }
+
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [selectedProject]);
+
+  const projects: Project[] = [
     { 
       title: "Nexus Wallet", 
       category: "Web3 & Fintech", 
       desc: "A next-generation multi-chain wallet focused on security and abstracting complex transactions. Features include multi-sig support, hardware wallet integration, and a seamless cross-chain swap interface.",
       img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDU0NDMztrcdZYMOYEgPHLLNM1nyCnPuYboG5OH8hY4-a9vPde6klB8SxvbmSTQK9xr03fjlEXMbbC71b2nQeHk2IkzLcvPTUQBfDhvfknENIXv2zBpLRqQIhGF5ort0Pfm6y03hrHw917P3Oqo2xOIgzdVVUjVRJI2cjTcAAbdgVq6kRfkXaCTKpUxlslVsZN0Tzo3BQtV0HRyVyQuj2An0UBVDnhFwHpqt8TwRrXShJm2iur3pcCbJ4Fc-4YpBHiif25YejkS1-I",
-      featured: true 
+      featured: true,
+      link: "#",
+      caseStudyLink: "#"
     },
     { 
       title: "Orbit Home", 
       category: "IoT Ecosystem", 
       desc: "Comprehensive smart home management system. Integrates with over 500+ devices to provide a unified control center for lighting, security, climate, and energy monitoring with AI-driven automation.",
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBHaa82XUHVU0P5IV_IF0cHrYLwomuZ0LYxqVng8_LMZNvXrF4O_w797A6ZMOy5qmBysmnUyUodsG_ATtw-9uUlaHsqZCyE6KNKU9S0ZPpxc6xb5rwr6Ro-IfI5lz_fJ3XoJvKJB5MlhjMfw4gbMjc-JZVB-Dj6DDOFgTupqDEM8gfAsviLdCt5rfjJk86s_gI0VUwHYUgJUMCUI9xP4UcMrH_vWOhISuIEIuX3Ngi2mFWzdxk5GbY4t3XeTd3HYdWHs96L0LaZdYY" 
+      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBHaa82XUHVU0P5IV_IF0cHrYLwomuZ0LYxqVng8_LMZNvXrF4O_w797A6ZMOy5qmBysmnUyUodsG_ATtw-9uUlaHsqZCyE6KNKU9S0ZPpxc6xb5rwr6Ro-IfI5lz_fJ3XoJvKJB5MlhjMfw4gbMjc-JZVB-Dj6DDOFgTupqDEM8gfAsviLdCt5rfjJk86s_gI0VUwHYUgJUMCUI9xP4UcMrH_vWOhISuIEIuX3Ngi2mFWzdxk5GbY4t3XeTd3HYdWHs96L0LaZdYY",
+      link: "#",
+      caseStudyLink: "#"
     },
     { 
       title: "Nomad Trails", 
       category: "Travel Tech", 
       desc: "Adventure planning platform for off-grid travelers. Includes offline maps, community-sourced trail data, and emergency satellite communication integration for the ultimate wilderness experience.",
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC6UtVHU4-sIjfDFUhMr-jM1LMv1eZUoNc1rZYzx5ychJDRfB8Jn83PesW1yWF7NQLil9Nq4Oj-pBmVsWypl05_KOnnNFsgwJ6vRNSmuAM1uMcnjTyARMALo5f2SuyYx9sYzIg9t18EZfpTsguI1zhlzfu4m84IqkhQqdEXQ3xMXSHRLPcrSNERZPJUS-CPN2gfzyCwY9WpcmgWZ7pq_4QW0dKgMeeDjwSF_xpJWYMebTI8N_0g3fS3nFKJRBEeFE6Zm55dpWk11h8" 
+      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC6UtVHU4-sIjfDFUhMr-jM1LMv1eZUoNc1rZYzx5ychJDRfB8Jn83PesW1yWF7NQLil9Nq4Oj-pBmVsWypl05_KOnnNFsgwJ6vRNSmuAM1uMcnjTyARMALo5f2SuyYx9sYzIg9t18EZfpTsguI1zhlzfu4m84IqkhQqdEXQ3xMXSHRLPcrSNERZPJUS-CPN2gfzyCwY9WpcmgWZ7pq_4QW0dKgMeeDjwSF_xpJWYMebTI8N_0g3fS3nFKJRBEeFE6Zm55dpWk11h8",
+      link: "#",
+      caseStudyLink: "#"
     },
     { 
       title: "Pulse Analytics", 
       category: "B2B SaaS", 
       desc: "Real-time business intelligence dashboard for enterprise scale. Leverages machine learning to predict market trends and provide actionable insights through intuitive data visualizations.",
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDCBEyGjplMi6jZjMQw9Le8FafESNAew48ng7WWZV6Jk8tYTBgJQjmIMbW1hfR44jbyviXlIjJ_VEOSQYbafbVgKYQI1LntFSaqwl5a4e2y9aGRQbE2Fp2umwND7w3On2j7YlTVhhn3-C2C5zHfY0VYFRxhi9WrqNt3Cy3BJtW8LGdytF9tHWG8lInsEsGxNeYBx77LOqkI4rLcTgDwKTxdaxmMdiPb3uuTO1jKHWjo9a9cNO16yy_iO0-114Co5WABYg4ukFba5g0" 
+      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDCBEyGjplMi6jZjMQw9Le8FafESNAew48ng7WWZV6Jk8tYTBgJQjmIMbW1hfR44jbyviXlIjJ_VEOSQYbafbVgKYQI1LntFSaqwl5a4e2y9aGRQbE2Fp2umwND7w3On2j7YlTVhhn3-C2C5zHfY0VYFRxhi9WrqNt3Cy3BJtW8LGdytF9tHWG8lInsEsGxNeYBx77LOqkI4rLcTgDwKTxdaxmMdiPb3uuTO1jKHWjo9a9cNO16yy_iO0-114Co5WABYg4ukFba5g0",
+      link: "#",
+      caseStudyLink: "#"
     },
     { 
       title: "Lumina Health", 
       category: "Healthcare", 
       desc: "Patient-centric health management app. Streamlines doctor-patient communication, prescription tracking, and integrates with wearable devices to provide a 360-degree view of patient wellness.",
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBDJB0J9K37E3bDwl5sv0m-QdwEztNEth7yOCI-z-0hj-jbo8twR-uOkIw9sdVGoMV23S845NEbclLeXmvbNqLuW11ulbQwJABau12cEHusgCERm_U776kUFyiSF8wSonxZ-CupQLaONmsFeMPQGs8Ie55fn1VpSzEufckdXDArVfOfbLdRJhV9CiAM_U698n9-eZNoGR4LyfW9KyyfCt09EaLfSXCMkgeYwQExbzC_GxwPKqITBtb6NhEaQNi00OAolyM_sE04lhE" 
+      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBDJB0J9K37E3bDwl5sv0m-QdwEztNEth7yOCI-z-0hj-jbo8twR-uOkIw9sdVGoMV23S845NEbclLeXmvbNqLuW11ulbQwJABau12cEHusgCERm_U776kUFyiSF8wSonxZ-CupQLaONmsFeMPQGs8Ie55fn1VpSzEufckdXDArVfOfbLdRJhV9CiAM_U698n9-eZNoGR4LyfW9KyyfCt09EaLfSXCMkgeYwQExbzC_GxwPKqITBtb6NhEaQNi00OAolyM_sE04lhE",
+      link: "#",
+      caseStudyLink: "#"
     }
   ];
 
@@ -232,8 +272,7 @@ const Projects = () => {
         className="grid grid-cols-1 md:grid-cols-12 gap-6"
       >
         <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, i) => {
-            const isExpanded = expandedId === project.title;
+          {filteredProjects.map((project) => {
             const isFeatured = project.featured && filter === "All";
             
             return (
@@ -244,12 +283,26 @@ const Projects = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                onClick={() => setExpandedId(isExpanded ? null : project.title)}
+                tabIndex={0}
+                role="button"
+                aria-haspopup="dialog"
+                aria-expanded={selectedProject?.title === project.title}
+                onClick={(e) => {
+                  triggerRef.current = e.currentTarget as HTMLDivElement;
+                  setSelectedProject(project);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    triggerRef.current = e.currentTarget as HTMLDivElement;
+                    setSelectedProject(project);
+                  }
+                }}
                 className={`
-                  ${isFeatured || isExpanded ? "md:col-span-8 md:h-[500px]" : "md:col-span-4"} 
+                  ${isFeatured ? "md:col-span-8" : "md:col-span-4"} 
                   group relative overflow-hidden rounded-3xl cursor-pointer
                   aspect-[16/10] md:aspect-auto 
-                  ${(!isFeatured && !isExpanded) ? "aspect-square" : ""}
+                  ${!isFeatured ? "aspect-square" : ""}
                   transition-all duration-500
                 `}
               >
@@ -262,39 +315,12 @@ const Projects = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-surface/95 via-surface/40 to-transparent p-8 flex flex-col justify-end">
                   <div className="space-y-3">
                     <span className="text-xs font-bold uppercase tracking-widest text-primary">{project.category}</span>
-                    <h3 className={`${(isFeatured || isExpanded) ? "text-4xl" : "text-xl"} font-bold`}>{project.title}</h3>
+                    <h3 className={`${isFeatured ? "text-4xl" : "text-xl"} font-bold`}>{project.title}</h3>
                     
-                    <AnimatePresence>
-                      {(isFeatured || isExpanded) && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <p className="text-on-surface-variant max-w-md mt-2 leading-relaxed">
-                            {project.desc}
-                          </p>
-                          <div className="flex gap-4 mt-6">
-                            <button className="flex items-center gap-2 bg-primary text-surface px-6 py-2 rounded-full font-bold text-sm hover:bg-white transition-all">
-                              View Case Study 
-                              <ArrowRight className="w-4 h-4" />
-                            </button>
-                            <button className="flex items-center gap-2 border border-outline-variant text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-surface-container-highest transition-all">
-                              Live Project
-                              <ExternalLink className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    {!(isFeatured || isExpanded) && (
-                      <div className="flex items-center gap-2 text-white font-bold group/btn pt-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                        View Details 
-                        <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2 text-white font-bold group/btn pt-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                      View Details 
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -302,6 +328,86 @@ const Projects = () => {
           })}
         </AnimatePresence>
       </motion.div>
+
+      {/* Project Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-desc"
+          >
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProject(null)}
+              className="absolute inset-0 bg-surface/90 backdrop-blur-md"
+            />
+            
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-5xl bg-surface-container-high rounded-[2.5rem] overflow-hidden shadow-2xl border border-outline-variant flex flex-col md:flex-row max-h-[90vh]"
+            >
+              <button 
+                ref={closeButtonRef}
+                onClick={() => setSelectedProject(null)}
+                aria-label="Close modal"
+                className="absolute top-6 right-6 z-10 p-2 rounded-full bg-surface/50 backdrop-blur hover:bg-white hover:text-surface transition-all focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <div className="md:w-1/2 h-64 md:h-auto overflow-hidden">
+                <img 
+                  src={selectedProject.img} 
+                  alt="" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+
+              <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center overflow-y-auto">
+                <div className="space-y-6">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">
+                      {selectedProject.category}
+                    </span>
+                    <h2 id="modal-title" className="text-4xl md:text-5xl font-black tracking-tighter">
+                      {selectedProject.title}
+                    </h2>
+                  </div>
+                  
+                  <p id="modal-desc" className="text-lg text-on-surface-variant leading-relaxed">
+                    {selectedProject.desc}
+                  </p>
+
+                  <div className="flex flex-wrap gap-4 pt-4">
+                    <a 
+                      href={selectedProject.caseStudyLink}
+                      className="flex items-center gap-2 bg-primary text-surface px-8 py-3 rounded-full font-bold hover:bg-white transition-all"
+                    >
+                      View Case Study 
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                    <a 
+                      href={selectedProject.link}
+                      className="flex items-center gap-2 border border-outline-variant text-white px-8 py-3 rounded-full font-bold hover:bg-surface-container-highest transition-all"
+                    >
+                      Live Project
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
