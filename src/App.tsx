@@ -38,7 +38,8 @@ const Navbar = () => (
     <div className="flex justify-between items-center max-w-7xl mx-auto px-6 lg:px-8 h-20">
       <span className="text-2xl font-black tracking-tighter text-white">Aleem</span>
       <div className="hidden md:flex items-center gap-10">
-        <a href="#work" className="text-primary font-bold border-b-2 border-primary pb-1">Work</a>
+        <a href="#work" className="text-on-surface-variant hover:text-white transition-colors">Work</a>
+        <a href="#about" className="text-on-surface-variant hover:text-white transition-colors">About</a>
         <a href="#experience" className="text-on-surface-variant hover:text-white transition-colors">Experience</a>
         <a href="#contact" className="text-on-surface-variant hover:text-white transition-colors">Contact</a>
       </div>
@@ -283,6 +284,7 @@ const Projects = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
+                whileHover={{ scale: 1.015 }}
                 tabIndex={0}
                 role="button"
                 aria-haspopup="dialog"
@@ -304,6 +306,8 @@ const Projects = () => {
                   aspect-[16/10] md:aspect-auto 
                   ${!isFeatured ? "aspect-square" : ""}
                   transition-all duration-500
+                  border border-transparent hover:border-primary/50
+                  hover:shadow-2xl hover:shadow-primary/10
                 `}
               >
                 <img 
@@ -456,6 +460,59 @@ const SkillsCerts = () => (
   </section>
 );
 
+const AboutMe = () => (
+  <section id="about" className="space-y-8">
+    <div className="flex items-center gap-4">
+      <h2 className="text-3xl font-bold tracking-tight">About Me</h2>
+      <div className="h-px flex-1 bg-outline-variant" />
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="md:col-span-8 space-y-6"
+      >
+        <p className="text-xl md:text-2xl text-on-surface leading-relaxed font-medium">
+          Mohammed Abdul Aleem is a Senior UX Designer with over 11 years of experience in crafting digital experiences that bridge the gap between human needs and technological possibilities.
+        </p>
+        <p className="text-lg text-on-surface-variant leading-relaxed">
+          His design philosophy centers on <span className="text-primary font-bold italic">"Intentional Simplicity"</span>—the belief that the most powerful interfaces are those that disappear, leaving only the user and their goals. With a deep passion for user-centric design, he specializes in transforming complex data into intuitive, high-impact products.
+        </p>
+        <div className="flex gap-8 pt-4">
+          <div className="flex flex-col">
+            <span className="text-primary font-bold text-3xl">11+</span>
+            <span className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Years of Craft</span>
+          </div>
+          <div className="w-px h-12 bg-outline-variant" />
+          <div className="flex flex-col">
+            <span className="text-primary font-bold text-3xl">25+</span>
+            <span className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Products Shipped</span>
+          </div>
+        </div>
+      </motion.div>
+      <motion.div 
+        initial={{ opacity: 0, x: 20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="md:col-span-4 flex justify-center"
+      >
+        <div className="relative group">
+          <div className="absolute -inset-4 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/30 transition-all duration-500" />
+          <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-outline-variant shadow-2xl">
+            <img 
+              src="https://i.pravatar.cc/400?u=aleem" 
+              alt="Mohammed Abdul Aleem" 
+              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  </section>
+);
+
 const Lab = () => (
   <section className="space-y-8">
     <div className="flex items-center gap-4">
@@ -485,8 +542,9 @@ const Lab = () => (
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
+        whileHover={{ scale: 1.02 }}
         viewport={{ once: true }}
-        className="glass-card rounded-3xl p-6 flex flex-col justify-between"
+        className="glass-card rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 border border-transparent hover:border-primary/50 cursor-default"
       >
         <Terminal className="text-primary w-8 h-8" />
         <div>
@@ -497,14 +555,37 @@ const Lab = () => (
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
+        whileHover={{ scale: 1.02 }}
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
-        className="glass-card rounded-3xl p-6 flex flex-col justify-between"
+        className="glass-card rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 border border-transparent hover:border-primary/50 cursor-default"
       >
         <Sparkles className="text-primary w-8 h-8" />
         <div>
           <h4 className="font-bold">Experiments</h4>
           <p className="text-xs text-on-surface-variant">Exploration of AI UI patterns.</p>
+        </div>
+      </motion.div>
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.2 }}
+        className="md:col-span-1 glass-card rounded-3xl overflow-hidden aspect-square relative group"
+      >
+        <img 
+          src="https://picsum.photos/seed/future-ui-abstract/800/800" 
+          alt="AI-Driven UI Concepts" 
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-surface/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-4 text-center">
+          <Cpu className="w-10 h-10 text-primary mb-2" />
+          <h4 className="font-bold text-sm">AI-Driven UI Concepts</h4>
+          <p className="text-[10px] text-on-surface-variant mt-1">Generative interface experiments exploring dynamic layout adaptation.</p>
+        </div>
+        <div className="absolute bottom-4 left-4">
+          <span className="bg-primary/20 backdrop-blur border border-primary/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest text-primary">Lab #09</span>
         </div>
       </motion.div>
     </div>
@@ -578,6 +659,7 @@ export default function App() {
         <Experience />
         <Projects />
         <SkillsCerts />
+        <AboutMe />
         <Lab />
         <CTA />
       </main>
