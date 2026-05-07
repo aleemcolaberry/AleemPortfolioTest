@@ -33,22 +33,61 @@ interface Project {
   caseStudyLink?: string;
 }
 
-const Navbar = () => (
-  <nav className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant">
-    <div className="flex justify-between items-center max-w-7xl mx-auto px-6 lg:px-8 h-20">
-      <span className="text-2xl font-black tracking-tighter text-white">Aleem</span>
-      <div className="hidden md:flex items-center gap-10">
-        <a href="#work" className="text-on-surface-variant hover:text-white transition-colors">Work</a>
-        <a href="#about" className="text-on-surface-variant hover:text-white transition-colors">About</a>
-        <a href="#experience" className="text-on-surface-variant hover:text-white transition-colors">Experience</a>
-        <a href="#contact" className="text-on-surface-variant hover:text-white transition-colors">Contact</a>
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <nav className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant">
+      <div className="flex justify-between items-center max-w-7xl mx-auto px-6 lg:px-8 h-20">
+        <span className="text-2xl font-black tracking-tighter text-white">Aleem</span>
+        
+        <div className="hidden md:flex items-center gap-10">
+          <a href="#work" className="text-on-surface-variant hover:text-white transition-colors font-medium">Work</a>
+          <a href="#about" className="text-on-surface-variant hover:text-white transition-colors font-medium">About</a>
+          <a href="#experience" className="text-on-surface-variant hover:text-white transition-colors font-medium">Experience</a>
+          <a href="#contact" className="text-on-surface-variant hover:text-white transition-colors font-medium">Contact</a>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button className="hidden sm:block bg-primary-container text-on-primary-container px-6 py-2.5 rounded-full font-bold hover:bg-white hover:text-surface transition-all active:scale-95 text-sm md:text-base">
+            Let's Talk
+          </button>
+          
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 text-on-surface-variant hover:text-white transition-colors"
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Box className="w-6 h-6 rotate-45" />}
+          </button>
+        </div>
       </div>
-      <button className="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-full font-bold hover:bg-white hover:text-surface transition-all active:scale-95">
-        Let's Talk
-      </button>
-    </div>
-  </nav>
-);
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-surface-container border-b border-outline-variant overflow-hidden"
+          >
+            <div className="flex flex-col p-6 gap-4">
+              <a href="#work" onClick={() => setIsOpen(false)} className="text-lg font-bold">Work</a>
+              <a href="#about" onClick={() => setIsOpen(false)} className="text-lg font-bold">About</a>
+              <a href="#experience" onClick={() => setIsOpen(false)} className="text-lg font-bold">Experience</a>
+              <a href="#contact" onClick={() => setIsOpen(false)} className="text-lg font-bold">Contact</a>
+              <div className="pt-4 border-t border-outline-variant">
+                <button className="w-full bg-primary text-surface py-4 rounded-2xl font-bold">
+                  Let's Talk
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
 
 const ToolBadge = ({ name }: { name: string; key?: string }) => (
   <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300 group">
@@ -131,11 +170,11 @@ const Hero = () => (
         <span className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-widest uppercase mb-4">
           Available for Projects
         </span>
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4 leading-[1.1]">
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-4 leading-[1.05]">
           Mohammed <br/><span className="text-primary">Abdul Aleem.</span>
         </h1>
         <p className="text-lg md:text-xl text-on-surface-variant max-w-2xl font-medium leading-relaxed">
-          Senior UX Designer crafting intelligent SaaS ecosystems and AI-driven experiences. 11+ years of merging human intent with digital precision.
+          Senior UX Designer crafting intelligent SaaS ecosystems and AI-driven experiences. 12+ years of merging human intent with digital precision.
         </p>
       </div>
     </motion.div>
@@ -170,7 +209,7 @@ const Hero = () => (
         transition={{ delay: 0.2 }}
         className="glass-card rounded-3xl p-6 flex flex-col justify-center items-center text-center"
       >
-        <span className="text-5xl font-black text-primary mb-1">11+</span>
+        <span className="text-5xl font-black text-primary mb-1">12+</span>
         <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Years Experience</span>
       </motion.div>
       
@@ -590,14 +629,14 @@ const AboutMe = () => (
         className="md:col-span-8 space-y-6"
       >
         <p className="text-xl md:text-2xl text-on-surface leading-relaxed font-medium">
-          Mohammed Abdul Aleem is a Senior UX Designer with over 11 years of experience in crafting digital experiences that bridge the gap between human needs and technological possibilities.
+          Mohammed Abdul Aleem is a Senior UX Designer with over 12 years of experience in crafting digital experiences that bridge the gap between human needs and technological possibilities.
         </p>
         <p className="text-lg text-on-surface-variant leading-relaxed">
           His design philosophy centers on <span className="text-primary font-bold italic">"Intentional Simplicity"</span>—the belief that the most powerful interfaces are those that disappear, leaving only the user and their goals. With a deep passion for user-centric design, he specializes in transforming complex data into intuitive, high-impact products.
         </p>
         <div className="flex gap-8 pt-4">
           <div className="flex flex-col">
-            <span className="text-primary font-bold text-3xl">11+</span>
+            <span className="text-primary font-bold text-3xl">12+</span>
             <span className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Years of Craft</span>
           </div>
           <div className="w-px h-12 bg-outline-variant" />
@@ -714,20 +753,20 @@ const CTA = () => (
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="glass-card rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden bg-gradient-to-tr from-primary/10 via-transparent to-transparent"
+      className="glass-card rounded-[3rem] p-10 md:p-24 text-center relative overflow-hidden bg-gradient-to-tr from-primary/10 via-transparent to-transparent"
     >
       <div className="relative z-10 space-y-8">
-        <h2 className="text-4xl md:text-7xl font-black tracking-tight max-w-4xl mx-auto leading-tight">
+        <h2 className="text-4xl md:text-7xl font-black tracking-tight max-w-4xl mx-auto leading-tight px-4">
           Let's Build Something <span className="text-primary">Remarkable.</span>
         </h2>
-        <p className="text-xl md:text-2xl text-on-surface-variant max-w-2xl mx-auto">
+        <p className="text-lg md:text-2xl text-on-surface-variant max-w-2xl mx-auto">
           Currently open for leadership roles and select high-impact freelance collaborations.
         </p>
-        <div className="flex flex-wrap justify-center gap-4 pt-4">
-          <button className="bg-primary text-surface px-10 py-5 rounded-full font-bold text-lg hover:bg-white transition-all scale-100 hover:scale-105 active:scale-95">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4 px-6">
+          <button className="bg-primary text-surface px-10 py-5 rounded-full font-bold text-lg hover:bg-white transition-all scale-100 hover:scale-105 active:scale-95 w-full sm:w-auto">
             Start a Conversation
           </button>
-          <button className="bg-surface-container-high border border-outline-variant text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-surface-container-highest transition-all">
+          <button className="bg-surface-container-high border border-outline-variant text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-surface-container-highest transition-all w-full sm:w-auto">
             View Resume
           </button>
         </div>
@@ -770,7 +809,7 @@ export default function App() {
   return (
     <div className="min-h-screen font-sans selection:bg-primary/30">
       <Navbar />
-      <main className="max-w-7xl mx-auto px-6 lg:px-8 space-y-32 pb-24">
+      <main className="max-w-7xl mx-auto px-6 lg:px-8 space-y-20 md:space-y-32 pb-24">
         <Hero />
         <Experience />
         <Projects />
