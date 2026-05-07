@@ -51,22 +51,22 @@ const Navbar = () => (
 );
 
 const Hero = () => (
-  <section className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-32">
+  <section className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-24">
     {/* Intro Card */}
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="md:col-span-7 glass-card rounded-3xl p-8 md:p-12 flex flex-col justify-end min-h-[480px] relative overflow-hidden"
+      className="md:col-span-7 glass-card rounded-3xl p-6 md:p-10 flex flex-col justify-end min-h-[400px] relative overflow-hidden"
     >
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[100px] rounded-full -mr-20 -mt-20" />
       <div className="relative z-10">
-        <span className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-widest uppercase mb-6">
+        <span className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-widest uppercase mb-4">
           Available for Projects
         </span>
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 leading-[1.1]">
+        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4 leading-[1.1]">
           Mohammed <br/><span className="text-primary">Abdul Aleem.</span>
         </h1>
-        <p className="text-xl md:text-2xl text-on-surface-variant max-w-2xl font-medium leading-relaxed">
+        <p className="text-lg md:text-xl text-on-surface-variant max-w-2xl font-medium leading-relaxed">
           Senior UX Designer crafting intelligent SaaS ecosystems and AI-driven experiences. 11+ years of merging human intent with digital precision.
         </p>
       </div>
@@ -77,7 +77,7 @@ const Hero = () => (
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.1 }}
-      className="md:col-span-5 glass-card rounded-3xl overflow-hidden relative group min-h-[480px]"
+      className="md:col-span-5 glass-card rounded-3xl overflow-hidden relative group min-h-[400px]"
     >
       <img 
         src="https://lh3.googleusercontent.com/d/18RtwP13bkXK9m_S-met1IJ-lZtFIP7LQ" 
@@ -86,7 +86,7 @@ const Hero = () => (
         referrerPolicy="no-referrer"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent" />
-      <div className="absolute bottom-8 left-8">
+      <div className="absolute bottom-6 left-6">
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
           <span className="text-sm font-bold uppercase tracking-widest text-white">Based in Hyderabad, India</span>
@@ -100,39 +100,39 @@ const Hero = () => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="glass-card rounded-3xl p-8 flex flex-col justify-center items-center text-center"
+        className="glass-card rounded-3xl p-6 flex flex-col justify-center items-center text-center"
       >
-        <span className="text-6xl font-black text-primary mb-2">11+</span>
-        <span className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Years Experience</span>
+        <span className="text-5xl font-black text-primary mb-1">11+</span>
+        <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Years Experience</span>
       </motion.div>
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="glass-card rounded-3xl p-8 flex flex-col justify-center items-center text-center bg-gradient-to-br from-primary-container/20 to-transparent"
+        className="glass-card rounded-3xl p-6 flex flex-col justify-center items-center text-center bg-gradient-to-br from-primary-container/20 to-transparent"
       >
-        <Box className="w-12 h-12 text-primary mb-4" />
-        <span className="text-lg font-bold">25+ Shipped Products</span>
+        <Box className="w-10 h-10 text-primary mb-3" />
+        <span className="text-base font-bold">25+ Shipped Products</span>
       </motion.div>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="glass-card rounded-3xl p-8 flex flex-col justify-center items-center text-center border border-primary/20"
+        className="glass-card rounded-3xl p-6 flex flex-col justify-center items-center text-center border border-primary/20"
       >
-        <div className="flex -space-x-3 mb-4">
+        <div className="flex -space-x-3 mb-3">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="w-10 h-10 rounded-full border-2 border-surface bg-surface-container-high overflow-hidden">
+            <div key={i} className="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-high overflow-hidden">
               <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="Client" referrerPolicy="no-referrer" />
             </div>
           ))}
-          <div className="w-10 h-10 rounded-full border-2 border-surface bg-primary flex items-center justify-center text-[10px] font-bold">
+          <div className="w-8 h-8 rounded-full border-2 border-surface bg-primary flex items-center justify-center text-[8px] font-bold">
             +50
           </div>
         </div>
-        <span className="text-lg font-bold">Happy Global Clients</span>
+        <span className="text-base font-bold">Happy Global Clients</span>
       </motion.div>
     </div>
   </section>
