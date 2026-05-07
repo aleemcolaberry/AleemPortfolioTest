@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { 
   ArrowUpRight, 
   Code2, 
@@ -50,6 +50,73 @@ const Navbar = () => (
   </nav>
 );
 
+const ToolBadge = ({ name }: { name: string; key?: string }) => (
+  <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300 group">
+    <div className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
+    <span className="text-[11px] font-mono font-medium text-white/50 group-hover:text-white tracking-widest uppercase">
+      {name}
+    </span>
+  </div>
+);
+
+const AILogoCloud = () => {
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, -60]);
+  const y2 = useTransform(scrollY, [0, 500], [0, -100]);
+  const y3 = useTransform(scrollY, [0, 500], [0, -140]);
+
+  const tools = [
+    { name: "Gemini" },
+    { name: "Claude" },
+    { name: "ChatGPT" },
+    { name: "Claude Code" },
+    { name: "Midjourney" },
+    { name: "Perplexity" },
+    { name: "Mistral" },
+    { name: "DeepSeek" },
+    { name: "Llama 3" },
+    { name: "Grok" },
+    { name: "Runway" },
+    { name: "Pika" },
+    { name: "Sora" },
+    { name: "Krea" },
+  ];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden select-none pointer-events-none mask-fade opacity-60">
+      <div className="flex flex-col gap-6 pt-12">
+        {/* Row 1 */}
+        <motion.div style={{ y: y1 }} className="flex shrink-0 gap-6 animate-scroll w-max">
+          {[...tools.slice(0, 5), ...tools.slice(0, 5), ...tools.slice(0, 5)].map((tool, i) => (
+            <ToolBadge key={`r1-${i}`} name={tool.name} />
+          ))}
+        </motion.div>
+
+        {/* Row 2 */}
+        <motion.div style={{ y: y2 }} className="flex shrink-0 gap-6 animate-scroll-reverse w-max ml-[-300px]">
+          {[...tools.slice(5, 10), ...tools.slice(5, 10), ...tools.slice(5, 10)].map((tool, i) => (
+            <ToolBadge key={`r2-${i}`} name={tool.name} />
+          ))}
+        </motion.div>
+
+        {/* Row 3 */}
+        <motion.div style={{ y: y3 }} className="flex shrink-0 gap-6 animate-scroll w-max ml-[-150px]">
+          {[...tools.slice(10), ...tools.slice(10), ...tools.slice(10)].map((tool, i) => (
+            <ToolBadge key={`r3-${i}`} name={tool.name} />
+          ))}
+        </motion.div>
+      </div>
+      
+      {/* Decorative Overlays */}
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-surface via-surface/80 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-surface to-transparent" />
+      
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]" />
+    </div>
+  );
+};
+
 const Hero = () => (
   <section className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-24">
     {/* Intro Card */}
@@ -58,6 +125,7 @@ const Hero = () => (
       animate={{ opacity: 1, y: 0 }}
       className="md:col-span-7 glass-card rounded-3xl p-6 md:p-10 flex flex-col justify-end min-h-[400px] relative overflow-hidden"
     >
+      <AILogoCloud />
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[100px] rounded-full -mr-20 -mt-20" />
       <div className="relative z-10">
         <span className="inline-block px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-widest uppercase mb-4">
@@ -173,8 +241,18 @@ const Experience = () => (
 const Projects = () => {
   const [filter, setFilter] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const handleProjectSelect = (project: Project) => {
+    setIsLoading(true);
+    setSelectedProject(project);
+    // Simulate fetching project details
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1200);
+  };
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -291,13 +369,13 @@ const Projects = () => {
                 aria-expanded={selectedProject?.title === project.title}
                 onClick={(e) => {
                   triggerRef.current = e.currentTarget as HTMLDivElement;
-                  setSelectedProject(project);
+                  handleProjectSelect(project);
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     triggerRef.current = e.currentTarget as HTMLDivElement;
-                    setSelectedProject(project);
+                    handleProjectSelect(project);
                   }
                 }}
                 className={`
@@ -355,7 +433,7 @@ const Projects = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-5xl bg-surface-container-high rounded-[2.5rem] overflow-hidden shadow-2xl border border-outline-variant flex flex-col md:flex-row max-h-[90vh]"
+              className="relative w-full max-w-5xl bg-surface-container-high rounded-[2.5rem] overflow-hidden shadow-2xl border border-outline-variant flex flex-col md:flex-row min-h-[500px] max-h-[90vh]"
             >
               <button 
                 ref={closeButtonRef}
@@ -366,48 +444,86 @@ const Projects = () => {
                 <X className="w-6 h-6" />
               </button>
 
-              <div className="md:w-1/2 h-64 md:h-auto overflow-hidden">
-                <img 
-                  src={selectedProject.img} 
-                  alt="" 
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-
-              <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center overflow-y-auto">
-                <div className="space-y-6">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">
-                      {selectedProject.category}
-                    </span>
-                    <h2 id="modal-title" className="text-4xl md:text-5xl font-black tracking-tighter">
-                      {selectedProject.title}
-                    </h2>
+              {isLoading ? (
+                <div className="w-full flex flex-col md:flex-row animate-pulse">
+                  <div className="md:w-1/2 h-64 md:h-auto bg-surface-container-highest flex items-center justify-center p-12">
+                    <motion.div 
+                      animate={{ 
+                        opacity: [0.3, 0.6, 0.3],
+                        scale: [1, 1.05, 1]
+                      }} 
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      <Box className="w-24 h-24 text-white/5" />
+                    </motion.div>
                   </div>
-                  
-                  <p id="modal-desc" className="text-lg text-on-surface-variant leading-relaxed">
-                    {selectedProject.desc}
-                  </p>
-
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    <a 
-                      href={selectedProject.caseStudyLink}
-                      className="flex items-center gap-2 bg-primary text-surface px-8 py-3 rounded-full font-bold hover:bg-white transition-all"
-                    >
-                      View Case Study 
-                      <ArrowRight className="w-4 h-4" />
-                    </a>
-                    <a 
-                      href={selectedProject.link}
-                      className="flex items-center gap-2 border border-outline-variant text-white px-8 py-3 rounded-full font-bold hover:bg-surface-container-highest transition-all"
-                    >
-                      Live Project
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
+                  <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center space-y-8 bg-surface-container-high">
+                    <div className="space-y-4">
+                      <div className="h-4 w-24 bg-white/5 rounded-full" />
+                      <div className="h-12 w-full bg-white/5 rounded-2xl" />
+                      <div className="h-12 w-3/4 bg-white/5 rounded-2xl" />
+                    </div>
+                    <div className="space-y-3">
+                      <div className="h-4 w-full bg-white/5 rounded-full" />
+                      <div className="h-4 w-full bg-white/5 rounded-full" />
+                      <div className="h-4 w-2/3 bg-white/5 rounded-full" />
+                    </div>
+                    <div className="flex gap-4 pt-4">
+                      <div className="h-12 w-40 bg-white/5 rounded-full" />
+                      <div className="h-12 w-32 bg-white/5 rounded-full" />
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <div className="md:w-1/2 h-64 md:h-auto overflow-hidden">
+                    <img 
+                      src={selectedProject.img} 
+                      alt="" 
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+
+                  <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center overflow-y-auto">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="space-y-6"
+                    >
+                      <div>
+                        <span className="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">
+                          {selectedProject.category}
+                        </span>
+                        <h2 id="modal-title" className="text-4xl md:text-5xl font-black tracking-tighter">
+                          {selectedProject.title}
+                        </h2>
+                      </div>
+                      
+                      <p id="modal-desc" className="text-lg text-on-surface-variant leading-relaxed">
+                        {selectedProject.desc}
+                      </p>
+
+                      <div className="flex flex-wrap gap-4 pt-4">
+                        <a 
+                          href={selectedProject.caseStudyLink}
+                          className="flex items-center gap-2 bg-primary text-surface px-8 py-3 rounded-full font-bold hover:bg-white transition-all shadow-lg shadow-primary/20"
+                        >
+                          View Case Study 
+                          <ArrowRight className="w-4 h-4" />
+                        </a>
+                        <a 
+                          href={selectedProject.link}
+                          className="flex items-center gap-2 border border-outline-variant text-white px-8 py-3 rounded-full font-bold hover:bg-surface-container-highest transition-all"
+                        >
+                          Live Project
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </div>
+                    </motion.div>
+                  </div>
+                </>
+              )}
             </motion.div>
           </div>
         )}
